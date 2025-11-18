@@ -1,0 +1,17 @@
+body{
+    background-color: blue;
+    
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+header{
+    background-color: rgb(48, 48, 218);
+    border-width: 2px;
+    border-color: aliceblue;
+    border-style: solid;
+    width: 100%;
+
+}

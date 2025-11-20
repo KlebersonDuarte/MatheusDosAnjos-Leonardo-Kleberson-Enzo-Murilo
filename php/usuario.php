@@ -16,7 +16,19 @@ if ($acao === 'cadastrar') {
     $name  = trim($data->NOME ?? '');
     $email = trim($data->EMAILnew  ?? '');
     $senha = trim($data->SENHAnew  ?? '');
-    $cpf = trim($data->CPF  ?? '');
+    $cpf   = trim($data->CPF  ?? '');
+
+
+    if (
+        strlen($senha) < 8 ||
+        !preg_match('/[A-Z]/', $senha) || 
+        !preg_match('/[a-z]/', $senha) ||
+        !preg_match('/[0-9]/', $senha) || 
+        !preg_match('/[\W]/', $senha)
+    ) {
+        echo json_encode(['Resposta' => false, 'msg' => "A senha deve conter: mínimo 8 caracteres, letra MAIÚSCULA, minúscula, número e símbolo."]);
+        exit;
+    }
 
     // Verificar se já existe usuário com o mesmo email
     $preEmail = $mysqli->prepare("SELECT ID_USUARIO FROM tb_usuario WHERE EMAIL_USUARIO = ?");
@@ -24,84 +36,102 @@ if ($acao === 'cadastrar') {
     $preEmail->execute();
     $preEmail->store_result();
 
+    // Verificar CPF duplicado
     $preCPF = $mysqli->prepare("SELECT ID_USUARIO FROM tb_usuario WHERE CPF_USUARIO = ?");
     $preCPF->bind_param("s", $cpf);
     $preCPF->execute();
     $preCPF->store_result();
 
+    
     if ($preEmail->num_rows > 0 || $preCPF->num_rows > 0) {
-                $preEmail->close();
- echo json_encode(['Resposta' => true, 'msg' => "Email ou CPF já cadastrado."]);
-
-
+        echo json_encode(['Resposta' => false, 'msg' => "Email ou CPF já cadastrado."]);
+        exit;
     } else {
-        $preEmail->close();
+
         // Criar hash seguro da senha
         $hash = password_hash($senha, PASSWORD_DEFAULT);
 
         // Inserir novo usuário com prepared statement
-        $preSenha = $mysqli->prepare("INSERT INTO tb_usuario(NOME_USUARIO, EMAIL_USUARIO, SENHA_USUARIO,CPF_USUARIO) VALUES (?,?,?,?)");
-        $preSenha->bind_param("ssss", $name, $email, $hash,$cpf);
+        $pre = $mysqli->prepare("INSERT INTO tb_usuario(NOME_USUARIO, EMAIL_USUARIO, SENHA_USUARIO,CPF_USUARIO) VALUES (?,?,?,?)");
+        $pre->bind_param("ssss", $name, $email, $hash, $cpf);
 
-        if ($preSenha->execute()) {
-       echo json_encode(['Resposta' => true, 'msg' => "Cadastro realizado com sucesso."]);
-exit;
-
+        if ($pre->execute()) {
+            echo json_encode(['Resposta' => true, 'msg' => "Cadastro realizado com sucesso."]);
+            exit;
         } else {
-            echo json_encode(['Resposta' => true, 'msg' => "Erro ao cadastrar: " . $preSenha->error]);
+            echo json_encode(['Resposta' => true, 'msg' => "Erro ao cadastrar: " . $pre->error]);
             exit; 
         }
-        $preSenha->close();
     }
-
 }
 
-else if($acao === "login"){
+else if ($acao === "login"){
 
     $email = trim($data->EMAIL  ?? '');
     $senha = trim($data->SENHA  ?? '');
 
-    
-    $preEmail = $mysqli->prepare("SELECT ID_USUARIO,NOME_USUARIO, SENHA_USUARIO FROM tb_usuario WHERE EMAIL_USUARIO = ?");
+    $preEmail = $mysqli->prepare("SELECT ID_USUARIO, NOME_USUARIO, SENHA_USUARIO FROM tb_usuario WHERE EMAIL_USUARIO = ?");
     $preEmail->bind_param("s", $email);
     $preEmail->execute();
-    $result = $preEmail->get_result();
+    $resultado = $preEmail->get_result();
 
-    if ($result && $result->num_rows === 1) {
-        $usuario = $result->fetch_assoc();
+    if ($resultado && $resultado->num_rows === 1) {
+        $usuario = $resultado->fetch_assoc();
         $hash = $usuario['SENHA_USUARIO'];
 
         if (password_verify($senha, $hash)) {
             $_SESSION['user'] = $usuario['ID_USUARIO'];
             $_SESSION['name'] = $usuario['NOME_USUARIO'];
             session_regenerate_id(true);
-echo json_encode(['Resposta' => true, 'msg' => "Login realizado com sucesso."]);
 
+            echo json_encode(['Resposta' => true, 'msg' => "Login realizado com sucesso.", 'redirecionamento' => '../index.php']);
             exit;
         } else {
-           echo json_encode(['Resposta' => false, 'msg' => "Email ou senha inválidos"]);
-exit;
-
+            echo json_encode(['Resposta' => false, 'msg' => "Email ou senha inválidos"]);
+            exit;
         }
     } else {
-           echo json_encode(['Resposta' => false, 'msg' => "Email ou senha inválidos"]);
-exit;
-
+        echo json_encode(['Resposta' => false, 'msg' => "Email ou senha inválidos"]);
+        exit;
     }
-    $preEmail->close();
+}
+else if ($acao === "deslogar") {
+
+
+    $_SESSION = [];
+try{
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000,
+            $params["path"], $params["domain"],
+            $params["secure"], $params["httponly"]
+        );
+    }
+
+    session_destroy();
+
+    echo json_encode(["Resposta" => true,"msg" => "Adeus.","redirecionamento" => "php/indexBack.php"]);
+    exit;}
+    catch(Error){
+         echo json_encode(["Resposta" => false,"msg" => "Falha em deslogar."]);
+    exit;
+    }
 }
 
-else{
-echo json_encode(['Resposta' => false, 'msg' => "Falha no sistema"]);
-exit;
-
+else {
+    echo json_encode(['Resposta' => false, 'msg' => "Falha no sistema"]);
+    exit;
 }
+
+break;
+
+case "GET":
+    echo json_encode(['Resposta' => false, 'msg' => "O sistema não suporta GET"]); 
     break;
 
-    case "GET":
-        echo json_encode(['Resposta' => false, 'msg' => "O sistema não suporta GET"]); 
-        break;
-    default:
+default:
     echo json_encode(['Resposta' => false, 'msg' => "Falha no sistema"]); 
     break;
 }
+
+

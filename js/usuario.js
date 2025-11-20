@@ -20,6 +20,11 @@ async function fCadastrar() {
 
     const Resposta = await Retorno.json();
 alert(Resposta.msg);
+
+if (Resposta.redirecionamento) {
+    window.location.href = Resposta.redirecionamento;
+}
+
 }
   catch (error) {
     console.error("Erro:",error)
@@ -39,7 +44,6 @@ async function fLogin() {
         return; 
     }
 
-
   try {
     const Retorno = await fetch("usuario.php",{
         method: "POST",
@@ -50,7 +54,32 @@ async function fLogin() {
     const Resposta = await Retorno.json();
 alert(Resposta.msg);
 
+if (Resposta.redirecionamento) {
+    window.location.href = Resposta.redirecionamento;
+}
+
   } catch (error) {
     console.error("Erro:",error)
+  }
+}
+
+async function fDeslogar() {
+  try {
+    const sair = { acao: "deslogar" };
+
+
+    const Retorno = await fetch("php/usuario.php",{
+      method:"POST",
+      headers:{ 'Content-Type': 'application/json' },
+      body: JSON.stringify(sair)
+    })
+
+     const Resposta = await Retorno.json();
+
+    alert(Resposta.msg);
+    if (Resposta.redirecionamento) {
+    window.location.href = Resposta.redirecionamento;}
+  } catch (error) {
+        console.error("Erro:",error)
   }
 }

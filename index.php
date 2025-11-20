@@ -10,9 +10,8 @@
     <header><h1>HealthFarms</h1></header>
 
 
+<button type="button" onclick="fDeslogar()">Sair</button>
 
- <a href=""></a>
-
-   
+   <script src="js/usuario.js"></script>
 </body>
 </html>

@@ -10,6 +10,13 @@ switch($Method){
  case "POST":
     $json_string = file_get_contents("php://input");
     $data = json_decode($json_string);
+    
+    // Verificar se o JSON foi decodificado corretamente
+    if (json_last_error() !== JSON_ERROR_NONE || $data === null) {
+        echo json_encode(['Resposta' => false, 'msg' => "Erro ao processar dados: " . json_last_error_msg()]);
+        exit;
+    }
+    
     $acao = $data->acao ?? 'desconhecida';
 
 if ($acao === 'cadastrar') {
@@ -70,21 +77,39 @@ else if ($acao === "login"){
     $email = trim($data->EMAIL  ?? '');
     $senha = trim($data->SENHA  ?? '');
 
+    // Validar se email e senha foram fornecidos
+    if (empty($email) || empty($senha)) {
+        echo json_encode(['Resposta' => false, 'msg' => "Email e senha são obrigatórios"]);
+        exit;
+    }
+
     $preEmail = $mysqli->prepare("SELECT ID_USUARIO, NOME_USUARIO, SENHA_USUARIO FROM tb_usuario WHERE EMAIL_USUARIO = ?");
+    
+    if (!$preEmail) {
+        echo json_encode(['Resposta' => false, 'msg' => "Erro na preparação da query: " . $mysqli->error]);
+        exit;
+    }
+    
     $preEmail->bind_param("s", $email);
-    $preEmail->execute();
-    $resultado = $preEmail->get_result();
-
-    if ($resultado && $resultado->num_rows === 1) {
-        $usuario = $resultado->fetch_assoc();
-        $hash = $usuario['SENHA_USUARIO'];
-
-        if (password_verify($senha, $hash)) {
-            $_SESSION['user'] = $usuario['ID_USUARIO'];
-            $_SESSION['name'] = $usuario['NOME_USUARIO'];
+    
+    if (!$preEmail->execute()) {
+        echo json_encode(['Resposta' => false, 'msg' => "Erro ao executar query: " . $preEmail->error]);
+        exit;
+    }
+    
+    // Usar store_result() e bind_result() como alternativa mais compatível
+    $preEmail->store_result();
+    
+    if ($preEmail->num_rows === 1) {
+        $preEmail->bind_result($id_usuario, $nome_usuario, $hash_senha);
+        $preEmail->fetch();
+        
+        if (password_verify($senha, $hash_senha)) {
+            $_SESSION['user'] = $id_usuario;
+            $_SESSION['name'] = $nome_usuario;
             session_regenerate_id(true);
 
-            echo json_encode(['Resposta' => true, 'msg' => "Login realizado com sucesso.", 'redirecionamento' => '../index.php']);
+            echo json_encode(['Resposta' => true, 'msg' => "Login realizado com sucesso.", 'redirecionamento' => 'index.php']);
             exit;
         } else {
             echo json_encode(['Resposta' => false, 'msg' => "Email ou senha inválidos"]);
@@ -94,28 +119,8 @@ else if ($acao === "login"){
         echo json_encode(['Resposta' => false, 'msg' => "Email ou senha inválidos"]);
         exit;
     }
-}
-else if ($acao === "deslogar") {
-
-
-    $_SESSION = [];
-try{
-    if (ini_get("session.use_cookies")) {
-        $params = session_get_cookie_params();
-        setcookie(session_name(), '', time() - 42000,
-            $params["path"], $params["domain"],
-            $params["secure"], $params["httponly"]
-        );
-    }
-
-    session_destroy();
-
-    echo json_encode(["Resposta" => true,"msg" => "Adeus.","redirecionamento" => "php/indexBack.php"]);
-    exit;}
-    catch(Error){
-         echo json_encode(["Resposta" => false,"msg" => "Falha em deslogar."]);
-    exit;
-    }
+    
+    $preEmail->close();
 }
 
 else {
@@ -133,5 +138,3 @@ default:
     echo json_encode(['Resposta' => false, 'msg' => "Falha no sistema"]); 
     break;
 }
-
-

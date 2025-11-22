@@ -65,30 +65,25 @@ switch($method){
 
 else if($acao === "renovar"){
 
-    // 1. Data de hoje
     $hoje = date("Y-m-d");
 
-    // 2. Buscar produtos vencidos
-    $tempo = $mysqli->prepare("SELECT ID_PRODUTO, NOME_PRODUTO, VALIDADE_PRODUTO 
-                              FROM tb_produto 
-                              WHERE VALIDADE_PRODUTO < ?");
+
+    $tempo = $mysqli->prepare("SELECT ID_PRODUTO, NOME_PRODUTO, VALIDADE_PRODUTO FROM tb_produto WHERE VALIDADE_PRODUTO < ?");
     $tempo->bind_param("s", $hoje);
     $tempo->execute();
     $resultado = $tempo->get_result();
 
-    // 3. Se não achou nenhum
+
     if($resultado->num_rows === 0){
         echo json_encode(["Resposta" => false, "msg" => "Nenhum produto vencido encontrado."]);
         exit;
     }
 
-    // 4. Salvar lista de vencidos
     $produtos = [];
     while($row = $resultado->fetch_assoc()){
         $produtos[] = $row;
     }
 
-    // 5. Renovar cada um (somar 1 mês)
     $update = $mysqli->prepare("UPDATE tb_produto SET VALIDADE_PRODUTO = ? WHERE ID_PRODUTO = ?");
 
     foreach($produtos as &$p){
@@ -96,7 +91,6 @@ else if($acao === "renovar"){
         $update->bind_param("si", $novaValidade, $p["ID_PRODUTO"]);
         $update->execute();
 
-        // salvar a nova validade na lista para enviar ao JS
         $p["NOVA_VALIDADE"] = $novaValidade;
     }
 

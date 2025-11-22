@@ -1,3 +1,4 @@
+//adicionar o produto ao banco de dados
 async function fProd() {
     const prod = document.getElementById("PRODUTOS");
     const dadosEstoque = new FormData(prod);
@@ -24,6 +25,7 @@ async function fProd() {
     }
 }
 
+//renovar produto vencido
 async function fRenovar() {
     const caixa = document.getElementById("ProdsVencidos");
     const renovar = {acao : "renovar"};

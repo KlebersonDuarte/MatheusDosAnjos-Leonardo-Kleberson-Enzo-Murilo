@@ -1,3 +1,5 @@
+
+//cadastrar usuario
 async function fCadastrar() {
     const CADASTRAR = document.getElementById("CADASTRAR");
 

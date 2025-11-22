@@ -16,10 +16,10 @@ if($acao === "pesquisar"){
     $pesquisa = $data["PESQUISAR"] ?? '';
     $pesquisa = "%$pesquisa%";
 
-    $stmt = $mysqli->prepare("SELECT * FROM tb_produto WHERE NOME_PRODUTO LIKE ? OR PRECO_PRODUTO LIKE ? OR CATEGORIA_PRODUTO LIKE ? OR DESCRICAO_PRODUTO LIKE ?");
-    $stmt->bind_param("ssss", $pesquisa, $pesquisa, $pesquisa, $pesquisa);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    $prePesq = $mysqli->prepare("SELECT * FROM tb_produto WHERE NOME_PRODUTO LIKE ? OR PRECO_PRODUTO LIKE ? OR CATEGORIA_PRODUTO LIKE ? OR DESCRICAO_PRODUTO LIKE ?");
+    $prePesq->bind_param("ssss", $pesquisa, $pesquisa, $pesquisa, $pesquisa);
+    $prePesq->execute();
+    $result = $prePesq->get_result();
 
     $produtos = [];
     while($row = $result->fetch_assoc()){

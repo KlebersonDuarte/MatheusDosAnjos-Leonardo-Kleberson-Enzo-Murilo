@@ -1,5 +1,5 @@
 <?php
-
+//conexão com o banco de dados
 $hostname = 'localhost';
 $bancodedados = 'farmacia';
 $usuario = 'root';

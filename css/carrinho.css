@@ -1,0 +1,339 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: rgb(48, 48, 218);
+    border-width: 2px;
+    border-color: aliceblue;
+    border-style: solid;
+    width: 100%;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+header h1 {
+    margin: 0;
+}
+
+header button {
+    padding: 10px 20px;
+    background-color: white;
+    color: rgb(48, 48, 218);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+header button:hover {
+    background-color: #e0e0e0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.container h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.produtos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.produto-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-header {
+    padding: 15px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.card-header h3 {
+    margin: 0 0 5px 0;
+    color: #333;
+    font-size: 18px;
+}
+
+.categoria {
+    display: inline-block;
+    background-color: rgb(48, 48, 218);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+.card-body {
+    padding: 15px;
+    flex-grow: 1;
+}
+
+.descricao {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.preco {
+    font-size: 24px;
+    font-weight: bold;
+    color: rgb(48, 48, 218);
+    margin-top: 10px;
+}
+
+.card-footer {
+    padding: 15px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.btn-adicionar {
+    width: 100%;
+    padding: 12px;
+    background-color: rgb(48, 48, 218);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.btn-adicionar:hover {
+    background-color: rgb(38, 38, 180);
+}
+
+/* Modal do Carrinho */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    overflow: auto;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 50px auto;
+    padding: 0;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    padding: 20px;
+    background-color: rgb(48, 48, 218);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px 8px 0 0;
+}
+
+.modal-header h2 {
+    margin: 0;
+}
+
+.btn-fechar {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+}
+
+.btn-fechar:hover {
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 50%;
+}
+
+.itens-carrinho {
+    padding: 20px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.carrinho-vazio {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 18px;
+}
+
+.item-carrinho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    gap: 20px;
+}
+
+.item-carrinho:last-child {
+    border-bottom: none;
+}
+
+.item-info {
+    flex-grow: 1;
+}
+
+.item-info h4 {
+    margin: 0 0 5px 0;
+    color: #333;
+}
+
+.item-categoria {
+    color: #666;
+    font-size: 12px;
+    margin: 0 0 5px 0;
+}
+
+.item-preco-unit {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+}
+
+.item-controles {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.quantidade-controle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.btn-qtd {
+    background-color: #f0f0f0;
+    border: none;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 18px;
+}
+
+.btn-qtd:hover {
+    background-color: #e0e0e0;
+}
+
+.qtd-valor {
+    min-width: 30px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.item-total {
+    min-width: 100px;
+    text-align: right;
+    color: rgb(48, 48, 218);
+    font-size: 18px;
+}
+
+.btn-remover {
+    padding: 8px 15px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-remover:hover {
+    background-color: #c82333;
+}
+
+.carrinho-footer {
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-top: 2px solid #e0e0e0;
+    border-radius: 0 0 8px 8px;
+}
+
+.total {
+    text-align: right;
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.botoes-carrinho {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn-continuar {
+    padding: 12px 30px;
+    background-color: rgb(48, 48, 218);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.btn-continuar:hover {
+    background-color: rgb(38, 38, 180);
+}
+
+@media (max-width: 768px) {
+    .item-carrinho {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .item-controles {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .produtos-grid {
+        grid-template-columns: 1fr;
+    }
+}
+

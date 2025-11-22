@@ -1,4 +1,6 @@
- async function fPesquisar() {
+
+//pesquisar o item no estoque
+async function fPesquisar() {
         const pesquisa = document.getElementById("PESQUISAR").value;
         if(!pesquisa) return alert("Digite algo para pesquisar");
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 21/11/2025 às 23:23
+-- Tempo de geração: 22/11/2025 às 17:34
 -- Versão do servidor: 9.1.0
 -- Versão do PHP: 8.3.14
 
@@ -20,6 +20,54 @@ SET time_zone = "+00:00";
 --
 -- Banco de dados: `farmacia`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `tb_carrinho`
+--
+
+DROP TABLE IF EXISTS `tb_carrinho`;
+CREATE TABLE IF NOT EXISTS `tb_carrinho` (
+  `ID_CARRINHO` int NOT NULL AUTO_INCREMENT,
+  `ID_USUARIO` int NOT NULL,
+  `CRIADO_CARRINHO` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID_CARRINHO`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Despejando dados para a tabela `tb_carrinho`
+--
+
+INSERT INTO `tb_carrinho` (`ID_CARRINHO`, `ID_USUARIO`, `CRIADO_CARRINHO`) VALUES
+(1, 0, '2025-11-22 16:36:44');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `tb_item_carrinho`
+--
+
+DROP TABLE IF EXISTS `tb_item_carrinho`;
+CREATE TABLE IF NOT EXISTS `tb_item_carrinho` (
+  `ID_ITEM_CARRINHO` int NOT NULL AUTO_INCREMENT,
+  `ID_CARRINHO` int NOT NULL,
+  `ID_PRODUTO` int NOT NULL,
+  `QUANTIDADE_ITEM` int NOT NULL,
+  `PRECO_UNITARIO` decimal(10,2) NOT NULL,
+  `TOTAL_ITEM` decimal(10,2) NOT NULL,
+  `ADICIONADO_EM` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`ID_ITEM_CARRINHO`),
+  KEY `ID_CARRINHO` (`ID_CARRINHO`),
+  KEY `ID_PRODUTO` (`ID_PRODUTO`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Despejando dados para a tabela `tb_item_carrinho`
+--
+
+INSERT INTO `tb_item_carrinho` (`ID_ITEM_CARRINHO`, `ID_CARRINHO`, `ID_PRODUTO`, `QUANTIDADE_ITEM`, `PRECO_UNITARIO`, `TOTAL_ITEM`, `ADICIONADO_EM`) VALUES
+(3, 1, 3, 1, 16.99, 16.99, '2025-11-22 16:41:44');
 
 -- --------------------------------------------------------
 

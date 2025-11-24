@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 24/11/2025 às 22:15
+-- Tempo de geração: 23/11/2025 às 22:14
 -- Versão do servidor: 9.1.0
 -- Versão do PHP: 8.3.14
 
@@ -398,11 +398,30 @@ INSERT INTO `tb_produto` (`ID_PRODUTO`, `NOME_PRODUTO`, `PRECO_PRODUTO`, `CATEGO
 (304, 'Preservativo Prudence Extra Grande', 16.00, 'Saúde Sexual', 'Tamanho especial para conforto.', '2025-03-02', '2027-03-02'),
 (305, 'Preservativo Jontex Texturizado', 15.50, 'Saúde Sexual', 'Texturas para mais estímulo.', '2025-03-10', '2027-03-10'),
 (306, 'Preservativo Olla Ultra Fino', 18.90, 'Saúde Sexual', 'Maior sensibilidade ao toque.', '2025-02-22', '2027-02-22'),
+(307, 'Lubrificante K-Med Neutro 50g', 19.99, 'Saúde Sexual', 'Lubrificante à base de água.', '2025-01-15', '2027-01-15'),
+(308, 'Lubrificante K-Med Hot 50g', 21.90, 'Saúde Sexual', 'Sensação de aquecimento.', '2025-03-09', '2027-03-09'),
+(309, 'Lubrificante K-Med Ice 50g', 21.90, 'Saúde Sexual', 'Sensação refrescante.', '2025-01-11', '2027-01-11'),
+(310, 'Lubrificante Prudence Neutro 60g', 17.70, 'Saúde Sexual', 'Lubrificante à base de água.', '2025-03-05', '2027-03-05'),
+(311, 'Gel Excitante Hot Flowers', 23.90, 'Saúde Sexual', 'Gel estimulante íntimo.', '2025-02-14', '2027-02-14'),
+(312, 'Gel Adstringente Sexy Hot', 28.50, 'Saúde Sexual', 'Sensação de firmeza íntima.', '2025-03-17', '2027-03-17'),
+(313, 'Anel Peniano Multivibra', 34.90, 'Saúde Sexual', 'Estímulo e vibração.', '2025-01-28', '2027-01-28'),
+(314, 'Anel Peniano Texturizado', 18.90, 'Saúde Sexual', 'Estímulo extra.', '2025-02-04', '2027-02-04'),
+(315, 'Vibrador Bullet Mini', 69.90, 'Saúde Sexual', 'Estímulo clitoriano.', '2025-03-12', '2027-03-12'),
+(316, 'Vibrador Multivelocidade', 89.90, 'Saúde Sexual', 'Estímulos variados.', '2025-01-24', '2027-01-24'),
+(317, 'Gel Retardante Men\'s Delay', 22.99, 'Saúde Sexual', 'Diminui sensibilidade.', '2025-03-20', '2027-03-20'),
+(318, 'Gel Viagra Natural', 29.90, 'Saúde Sexual', 'Estímulo para ereção.', '2025-02-19', '2027-02-19'),
 (319, 'Suplemento Libido Feminina', 39.90, 'Saúde Sexual', 'Aumenta disposição sexual.', '2025-01-13', '2027-01-13'),
 (320, 'Suplemento Libido Masculina', 42.50, 'Saúde Sexual', 'Auxilia na performance.', '2025-02-27', '2027-02-27'),
 (321, 'Analgésico Pós-Atividade Íntima', 14.60, 'Saúde Sexual', 'Alívio de desconforto.', '2025-01-09', '2027-01-09'),
+(322, 'Hidratante Íntimo Feminino', 19.50, 'Saúde Sexual', 'Conforto e umidade natural.', '2025-03-06', '2027-03-06'),
+(323, 'Sabonete Íntimo Masculino', 12.40, 'Saúde Sexual', 'Higiene íntima diária.', '2025-02-08', '2027-02-08'),
+(324, 'Sabonete Íntimo Feminino Dermacyd', 18.90, 'Saúde Sexual', 'Mantém pH equilibrado.', '2025-01-16', '2027-01-16'),
+(325, 'Testosterona Natural 120 cáps', 59.90, 'Saúde Sexual', 'Suporte hormonal.', '2025-02-13', '2027-02-13'),
+(326, 'Afrodisíaco Natural Gotas', 26.50, 'Saúde Sexual', 'Estímulo à libido.', '2025-03-10', '2027-03-10'),
+(327, 'Óleo de Massagem Erótico', 22.00, 'Saúde Sexual', 'Aroma e toque sensorial.', '2025-01-30', '2027-01-30'),
 (328, 'Preservativo Skyn Sem Látex', 22.90, 'Saúde Sexual', 'Ideal para alérgicos.', '2025-02-17', '2027-02-17'),
 (329, 'Preservativo Prudence Cores', 11.20, 'Saúde Sexual', 'Camisinhas coloridas.', '2025-01-25', '2027-01-25'),
+(330, 'Gel Corporal Sensual Mix', 27.90, 'Saúde Sexual', 'Gel excitante com fragrância.', '2025-03-01', '2027-03-01'),
 (331, 'Colônia Floral Rosa', 129.90, 'Perfumes', 'Fragrância suave de rosas para o dia a dia.', '2025-01-10', '2028-01-10'),
 (332, 'Perfume Amadeirado Masculino', 149.90, 'Perfumes', 'Notas de madeira e especiarias, masculino intenso.', '2025-02-05', '2027-02-05'),
 (333, 'Body Splash Baunilha', 99.90, 'Perfumes', 'Perfume corporal doce e confortável.', '2025-03-12', '2027-03-12'),

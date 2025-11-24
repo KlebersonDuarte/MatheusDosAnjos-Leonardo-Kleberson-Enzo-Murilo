@@ -23,13 +23,7 @@ case "POST":
         if ($pre->num_rows > 0) {
             $pre->bind_result($id, $nome, $preco, $categoria, $descricao);
             while ($pre->fetch()) {
-                $produtos[] = [
-                    'ID_PRODUTO' => $id,
-                    'NOME_PRODUTO' => $nome,
-                    'PRECO_PRODUTO' => $preco,
-                    'CATEGORIA_PRODUTO' => $categoria,
-                    'DESCRICAO_PRODUTO' => $descricao
-                ];
+                $produtos[] = ['ID_PRODUTO' => $id,'NOME_PRODUTO' => $nome,'PRECO_PRODUTO' => $preco,'CATEGORIA_PRODUTO' => $categoria,'DESCRICAO_PRODUTO' => $descricao];
             }
         }
 

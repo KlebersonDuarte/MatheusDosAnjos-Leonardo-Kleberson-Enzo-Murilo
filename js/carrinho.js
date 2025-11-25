@@ -138,19 +138,9 @@ async function fMostrarCarrinho() {
     }
 }
 
-// Ver carrinho (abrir modal)
-function fVerCarrinho() {
-    fMostrarCarrinho();
-}
-
 // Fechar carrinho
 function fFecharCarrinho() {
     document.getElementById("carrinhoModal").style.display = "none";
-}
-
-// Continuar comprando
-function fContinuarComprando() {
-    fFecharCarrinho();
 }
 
 // Atualizar quantidade
@@ -211,5 +201,38 @@ async function fRemoverItem(idItem) {
     } catch (error) {
         console.error("Erro:", error);
         alert("Erro ao remover item");
+    }
+}
+
+async function fPagar() {
+    if (!confirm("Deseja finalizar a compra?")) {
+        return;
+    }
+
+    try {
+        const Retorno = await fetch("carrinho.php", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ acao: "pagar" })
+        });
+
+        const Resposta = await Retorno.json();
+
+        if (Resposta.Resposta) {
+            alert("Compra finalizada com sucesso!\n\nPedido Nº: " + Resposta.pedido);
+
+            // Fecha carrinho e limpa exibição
+            fFecharCarrinho();
+            document.getElementById("itensCarrinho").innerHTML = "";
+            document.getElementById("totalCarrinho").textContent = "0.00";
+
+            // Carrinho foi zerado no banco
+        } else {
+            alert(Resposta.msg || "Erro ao finalizar compra");
+        }
+
+    } catch (error) {
+        console.error("Erro:", error);
+        alert("Não foi possível finalizar a compra");
     }
 }

@@ -9,7 +9,7 @@
 <body>
     <header>
         <h1>HealthFarms</h1>
-        <button type="button" onclick="fVerCarrinho()">Ver Carrinho</button>
+        <button type="button" onclick="fMostrarCarrinho()">Ver Carrinho</button>
     </header>
 
     <div class="container">
@@ -29,7 +29,9 @@
                     <strong>Total: R$ <span id="totalCarrinho">0.00</span></strong>
                 </div>
                 <div class="botoes-carrinho">
-                    <button type="button" onclick="fContinuarComprando()" class="btn-continuar">Continuar Comprando</button>
+                    <button type="button" onclick="fFecharCarrinho()" class="btn-continuar">Continuar Comprando</button>
+                    <button class="btn-pagar" onclick="fPagar()">PAGAR</button>
+
                 </div>
             </div>
         </div>

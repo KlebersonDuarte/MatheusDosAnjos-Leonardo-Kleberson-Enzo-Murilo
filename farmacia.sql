@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 24/11/2025 às 22:25
+-- Tempo de geração: 25/11/2025 às 01:52
 -- Versão do servidor: 9.1.0
 -- Versão do PHP: 8.3.14
 
@@ -33,14 +33,15 @@ CREATE TABLE IF NOT EXISTS `tb_carrinho` (
   `ID_USUARIO` int NOT NULL,
   `CRIADO_CARRINHO` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`ID_CARRINHO`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Despejando dados para a tabela `tb_carrinho`
 --
 
 INSERT INTO `tb_carrinho` (`ID_CARRINHO`, `ID_USUARIO`, `CRIADO_CARRINHO`) VALUES
-(1, 0, '2025-11-22 16:36:44');
+(1, 0, '2025-11-22 16:36:44'),
+(2, 0, '2025-11-25 01:30:36');
 
 -- --------------------------------------------------------
 
@@ -60,14 +61,47 @@ CREATE TABLE IF NOT EXISTS `tb_item_carrinho` (
   PRIMARY KEY (`ID_ITEM_CARRINHO`),
   KEY `ID_CARRINHO` (`ID_CARRINHO`),
   KEY `ID_PRODUTO` (`ID_PRODUTO`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Despejando dados para a tabela `tb_item_carrinho`
 --
 
 INSERT INTO `tb_item_carrinho` (`ID_ITEM_CARRINHO`, `ID_CARRINHO`, `ID_PRODUTO`, `QUANTIDADE_ITEM`, `PRECO_UNITARIO`, `TOTAL_ITEM`, `ADICIONADO_EM`) VALUES
-(3, 1, 3, 1, 16.99, 16.99, '2025-11-22 16:41:44');
+(3, 1, 3, 1, 16.99, 16.99, '2025-11-22 16:41:44'),
+(8, 2, 2, 1, 8.50, 8.50, '2025-11-25 01:47:18');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `tb_pedido`
+--
+
+DROP TABLE IF EXISTS `tb_pedido`;
+CREATE TABLE IF NOT EXISTS `tb_pedido` (
+  `ID_PEDIDO` int NOT NULL AUTO_INCREMENT,
+  `ID_USUARIO` int DEFAULT NULL,
+  `TOTAL_PEDIDO` decimal(10,2) DEFAULT NULL,
+  `DATA_PEDIDO` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID_PEDIDO`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `tb_pedido_item`
+--
+
+DROP TABLE IF EXISTS `tb_pedido_item`;
+CREATE TABLE IF NOT EXISTS `tb_pedido_item` (
+  `ID_PEDIDO_ITEM` int NOT NULL AUTO_INCREMENT,
+  `ID_PEDIDO` int DEFAULT NULL,
+  `ID_PRODUTO` int DEFAULT NULL,
+  `QUANTIDADE_ITEM` int DEFAULT NULL,
+  `PRECO_UNITARIO` decimal(10,2) DEFAULT NULL,
+  `TOTAL_ITEM` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`ID_PEDIDO_ITEM`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 

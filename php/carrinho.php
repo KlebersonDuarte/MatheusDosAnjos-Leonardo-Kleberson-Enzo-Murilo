@@ -14,7 +14,7 @@ case "POST":
 
 //LISTAR PRODUTOS
 
-    if ($acao === "listarProdutos") {
+if ($acao === "listarProdutos") {
         $pre = $mysqli->prepare("SELECT ID_PRODUTO, NOME_PRODUTO, PRECO_PRODUTO, CATEGORIA_PRODUTO, DESCRICAO_PRODUTO FROM tb_produto");
         $pre->execute();
         $pre->store_result();
@@ -32,7 +32,7 @@ case "POST":
     }
 
 // ADICIONAR ITEM AO CARRINHO
-    if ($acao === "adicionar") {
+else if ($acao === "adicionar") {
 
         $idProduto = $data->ID_PRODUTO ?? 0;
         $qtd = $data->QUANTIDADE ?? 1;
@@ -114,7 +114,7 @@ case "POST":
         }
     }
  //LISTAR CARRINHO
-    if ($acao === "listar") {
+else if ($acao === "listar") {
         
         if (!isset($_SESSION['id_carrinho'])) {
             echo json_encode(['Resposta' => true, 'itens' => []]);
@@ -142,7 +142,7 @@ case "POST":
     }
 
 //ATUALIZAR QUANTIDADE
-    if ($acao === "atualizar") {
+else if ($acao === "atualizar") {
 
         $idItem = $data->ID_ITEM_CARRINHO ?? 0;
         $novaQtd = $data->QUANTIDADE ?? 1;
@@ -161,7 +161,7 @@ case "POST":
     }
 
 //REMOVER ITEM
-    if ($acao === "remover") {
+else if ($acao === "remover") {
 
         $idItem = $data->ID_ITEM_CARRINHO ?? 0;
 
@@ -177,6 +177,74 @@ case "POST":
     exit;
 
 break;
+
+// PAGAR / FINALIZAR COMPRA
+if ($acao === "pagar") {
+
+    $idCarrinho = $_SESSION['id_carrinho'];
+
+    // 1. Buscar itens do carrinho
+    $it = $mysqli->prepare("SELECT ID_ITEM_CARRINHO, ID_PRODUTO, QUANTIDADE_ITEM, PRECO_UNITARIO, TOTAL_ITEM FROM tb_item_carrinho WHERE ID_CARRINHO = ?");
+    $it->bind_param("i", $idCarrinho);
+    $it->execute();
+    $res = $it->get_result();
+
+    if ($res->num_rows === 0) {
+        echo json_encode(['Resposta' => false, 'msg' => "Carrinho vazio"]);
+        exit;
+    }
+
+    // Somar total da compra
+    $totalCompra = 0;
+    $itens = [];
+
+    while ($row = $res->fetch_assoc()) {
+        $totalCompra += $row['TOTAL_ITEM'];
+        $itens[] = $row;
+    }
+
+    // 2. Criar o pedido (ID_USUARIO = 0 para visitante)
+    $prep = $mysqli->prepare("INSERT INTO tb_pedido (ID_USUARIO, TOTAL_PEDIDO, DATA_PEDIDO) VALUES (0, ?, NOW())");
+    $prep->bind_param("d", $totalCompra);
+    $prep->execute();
+
+    $idPedido = $prep->insert_id;
+
+    // 3. Inserir itens do pedido
+    $prep2 = $mysqli->prepare("INSERT INTO tb_pedido_item (ID_PEDIDO, ID_PRODUTO, QUANTIDADE_ITEM, PRECO_UNITARIO, TOTAL_ITEM) VALUES (?, ?, ?, ?, ?)");
+
+    foreach ($itens as $item) {
+        $prep2->bind_param("iiidd",$idPedido,$item['ID_PRODUTO'],$item['QUANTIDADE_ITEM'],$item['PRECO_UNITARIO'],$item['TOTAL_ITEM']);
+        $prep2->execute();
+    }
+
+    // 4. Limpar itens do carrinho
+    $del = $mysqli->prepare("DELETE FROM tb_item_carrinho WHERE ID_CARRINHO = ?");
+    $del->bind_param("i", $idCarrinho);
+    $del->execute();
+
+    // Opcional: apagar o carrinho também
+    $del2 = $mysqli->prepare("DELETE FROM tb_carrinho WHERE ID_CARRINHO = ?");
+    $del2->bind_param("i", $idCarrinho);
+    $del2->execute();
+
+    unset($_SESSION['id_carrinho']); // limpar sessão
+
+    echo json_encode(['Resposta' => true,'pedido' => $idPedido,'msg' => "Compra finalizada"]);
+exit;
+}
+
+else {
+    echo json_encode(['Resposta' => false, 'msg' => "Falha no sistema"]);
+    exit;
+}
+
+break;
+
+case "GET":
+    echo json_encode(['Resposta' => false, 'msg' => "O sistema não suporta GET"]); 
+    break;
+
 
 default:
     echo json_encode(['Resposta' => false, 'msg' => "Método inválido"]);

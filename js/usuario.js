@@ -14,7 +14,7 @@ async function fCadastrar() {
     }
 
   try{
-    const Retorno = await fetch("usuario.php",{
+    const Retorno = await fetch("php/usuario.php",{
         method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(dados)
@@ -47,7 +47,7 @@ async function fLogin() {
     }
 
   try {
-    const Retorno = await fetch("usuario.php",{
+    const Retorno = await fetch("php/usuario.php",{
         method: "POST",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(entrar)

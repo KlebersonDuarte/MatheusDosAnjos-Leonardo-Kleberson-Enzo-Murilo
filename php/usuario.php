@@ -103,6 +103,26 @@ else if ($acao === "login"){
     }
 }
 
+else if ($acao === "deslogar") {
+
+    // se a sessão usa cookies, apaga o cookie
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000,
+            $params["path"], $params["domain"],
+            $params["secure"], $params["httponly"]
+        );
+    }
+
+  unset($_SESSION['ID_USUARIO']);
+    unset($_SESSION['NOME_USUARIO']);
+
+    echo json_encode(['Resposta' => true,'msg' => "adeus",'redirecionamento' => "index.php"]);
+
+    exit;
+}
+
+
 else {
     echo json_encode(['Resposta' => false, 'msg' => "Falha no sistema"]);
     exit;

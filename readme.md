@@ -1,1 +1,2 @@
-Juntar o back-end com o front-end
+estou mechendo no,login,pesquisa e no carrinho
+tbm tem o negocio do adm

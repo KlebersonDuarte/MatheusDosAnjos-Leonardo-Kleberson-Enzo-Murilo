@@ -1,45 +1,60 @@
+const barraP = document.getElementById("barraP");
+const caixa = document.getElementById("sugestoes");
 
-//pesquisar o item no estoque
+// Dispara a pesquisa enquanto digita
+barraP.addEventListener("input", () => {
+    fPesquisar();
+});
+
+// Pressionar ENTER também pesquisa
+barraP.addEventListener("keydown", (event) => {
+    if(event.key === "Enter"){
+        event.preventDefault();
+        fPesquisar();
+    }
+});
+
+
+// Função que pesquisa no PHP
 async function fPesquisar() {
-        const pesquisa = document.getElementById("PESQUISAR").value;
-        if(!pesquisa) return alert("Digite algo para pesquisar");
 
-        try {
-            const Retorno = await fetch("pesquisa.php", {
-                method: "POST", // Agora usamos POST
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ acao: "pesquisar", PESQUISAR: pesquisa })
+    const pesquisa = barraP.value;
+
+    if (pesquisa === "") {
+        caixa.innerHTML = "";
+        return;
+    }
+
+    try {
+        const Retorno = await fetch("pesquisa.php", {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({acao: "pesquisar",PESQUISAR: pesquisa })});
+
+        const Resposta = await Retorno.json();
+
+        // Limpa antes de adicionar
+        caixa.innerHTML = "";
+
+        // Se vier vazio, não mostra nada
+        if (!Resposta || Resposta.length === 0) return;
+
+        // Cria lista de sugestões
+        Resposta.forEach(prod => {
+            const item = document.createElement("div");
+            item.classList.add("sug-item");
+            item.textContent = prod.NOME_PRODUTO;
+
+            // Quando clicar → coloca no input
+            item.addEventListener("click", () => {
+                barraP.value = prod.NOME_PRODUTO;
+                caixa.innerHTML = "";
             });
 
-            const Resposta = await Retorno.json();
+            caixa.appendChild(item);
+        });
 
-            const tabela = document.getElementById("tabelaProdutos");
-            tabela.innerHTML = `
-                <tr>
-                    <th>Nome</th>
-                    <th>Preço</th>
-                    <th>Categoria</th>
-                    <th>Descrição</th>
-                </tr>
-            `;
-
-            if(Resposta.length === 0){
-                tabela.innerHTML += `<tr><td colspan="4">Nenhum produto encontrado</td></tr>`;
-            } else {
-                Resposta.forEach(prod => {
-                    tabela.innerHTML += `
-                        <tr>
-                            <td>${prod.NOME_PRODUTO}</td>
-                            <td>${prod.PRECO_PRODUTO}</td>
-                            <td>${prod.CATEGORIA_PRODUTO}</td>
-                            <td>${prod.DESCRICAO_PRODUTO}</td>
-                        </tr>
-                    `;
-                });
-            }
-
-        } catch (error) {
-            console.error("Erro ao pesquisar:", error);
-            alert(Resposta.msg);
-        }
+    } catch (error) {
+        console.error("Erro:", error);
     }
+}
